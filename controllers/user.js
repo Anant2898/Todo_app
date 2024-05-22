@@ -50,7 +50,7 @@ export const register = async(req,res)=>{
 };
 
 export const logout = (req,res)=>{
-        console.log('z');
+        res.send("<h2>hi</h2>");
     const {token} = req.cookies;
     res.cookie("token",null,{
         httpOnly: true,
