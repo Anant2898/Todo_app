@@ -30,7 +30,7 @@ export const register = async(req,res)=>{
     console.log(0);
     const {name,email,password} = req.body;
         console.log(1);
-    let user = await User.findOne({email});
+    let user ;//= await User.findOne({email});
     if(user)
     {
         return res.status(404).json({
