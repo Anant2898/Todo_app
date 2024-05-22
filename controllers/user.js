@@ -29,6 +29,7 @@ export const login = async(req,res,next)=>{
 export const register = async(req,res)=>{
     
     const {name,email,password} = req.body;
+        console.log(1);
     let user = await User.findOne({email});
     if(user)
     {
@@ -37,12 +38,14 @@ export const register = async(req,res)=>{
             message: "User already exists"
         });
     }
+        console.log(2);
     const hashedpassword = await bcrypt.hash(password,10);
     user = await User.create({
             name,
             email,
             password: hashedpassword
     });
+        console.log(3);
     sendCookie(user,res,"Registered successfully",201);
 };
 
