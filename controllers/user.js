@@ -13,7 +13,7 @@ export const login = async(req,res,next)=>{
         
         
         //     const isMatch = await bcrypt.compare(password,user.password);
-        //     if(!isMatch)
+        //     if(!isMatch) 
         //     {
         //         return next(new ErrorHandler("Invalid email or password", 400));
         //     }
