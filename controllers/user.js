@@ -6,17 +6,17 @@ import ErrorHandler from "../middlewares/error.js";
 export const login = async(req,res,next)=>{
     try{
         const {email,name,password} = req.body;
-        const user = await User.findOne({email}).select("+password");
+        // const user = await User.findOne({email}).select("+password");
     
-        if(!user) return next(new ErrorHandler("Invalid email or password", 400));
+        // if(!user) return next(new ErrorHandler("Invalid email or password", 400));
     
         
         
-            const isMatch = await bcrypt.compare(password,user.password);
-            if(!isMatch)
-            {
-                return next(new ErrorHandler("Invalid email or password", 400));
-            }
+        //     const isMatch = await bcrypt.compare(password,user.password);
+        //     if(!isMatch)
+        //     {
+        //         return next(new ErrorHandler("Invalid email or password", 400));
+        //     }
             sendCookie(user,res,`Welcome ${user.name}`, 200);
     }
     catch(error)
