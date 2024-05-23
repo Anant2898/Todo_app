@@ -17,7 +17,11 @@ export const login = async(req,res,next)=>{
         //     {
         //         return next(new ErrorHandler("Invalid email or password", 400));
         //     }
-            sendCookie(user,res,`Welcome ${user.name}`, 200);
+            // sendCookie(user,res,`Welcome ${user.name}`, 200);
+            res.json({
+        success:true,
+        message
+     })
     }
     catch(error)
     {
