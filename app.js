@@ -5,6 +5,7 @@ import taskRouter from "./routes/task.js"
 import {config} from "dotenv";
 import cookieParser from "cookie-parser";
 import cors from "cors"
+import { errorMiddleware } from "./middlewares/error.js";
 
 export const server = express();
 
@@ -18,13 +19,14 @@ server.use(express.json());
 server.use(cookieParser());
 server.use(cors({
     origin: [process.env.FRONTEND_URL],
-    credentials: true,
+    credentials: true,  
     methods: ["GET","PUT","POST","DELETE"]
 }));
 //this line should be kept below above line in so that the json parsing is also done for user.js
 server.use( "/api/v1/users" , userRouter);
 server.use( "/api/v1/tasks" , taskRouter);
 server.get("/",(req,res)=>{
+    console.log('aabc');
     res.send("<h1 style='color:red;'>Nice working</h1>");
 });
 
@@ -44,11 +46,5 @@ server.get("/userid", async(req,res)=>{
     
 });
 
-server.use((err,req,res,next)=>{
-    err.message = err.message || "internal server error"
-    return res.status(404).json({
-        success:false,
-        message: err.message
-    });
-});
+server.use(errorMiddleware);
 
