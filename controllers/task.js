@@ -1,3 +1,4 @@
+import ErrorHandler from "../middlewares/error.js";
 import { Task } from "../models/task.js";
 
 export const newTask = async(req,res,next)=>{
@@ -21,43 +22,61 @@ export const newTask = async(req,res,next)=>{
         next(error);
     }
 };
-export const fetchTasks = async(req,res)=>{
-    const tasks = await Task.find({user:res.user});
-    //console.log(tasks);
-    res.json({
-        success:true,
-        tasks
-    });
+export const fetchTasks = async(req,res,next)=>{
+    try{
+        const tasks = await Task.find({user:res.user});
+        //console.log(tasks);
+        res.json({
+            success:true,
+            tasks
+        });
+    }
+    catch(error){
+        next(error);
+    }
+    
 };
 
 export const updateTask = async(req,res,next)=>{
+    try{
+        const task =  await Task.findById(req.params.id);
+        if(!task)
+        {
+            return next(new ErrorHandler("Task not found", 404));
+        }
+        task.isCompleted = !task.isCompleted;
+        
+        await task.save();
     
-    const task =  await Task.findById(req.params.id);
-    if(!task)
-    {
-        return next(new Error("Nice"));
+        res.json({
+            success:true,
+            message: "task updated"
+        });
     }
-    task.isCompleted = !task.isCompleted;
+    catch(error)
+    {
+        next(error);
+    }
     
-    await task.save();
-
-    res.json({
-        success:true,
-        message: "task updated"
-    });
 };
 
 
 export const deleteTask = async(req,res,next)=>{
-    
-    const task = await Task.findById(req.params.id);
-    if(!task)
-    {
-        return next(new Error());
+    try{
+                    
+        const task = await Task.findById(req.params.id);
+        if(!task)
+        {
+            return next(new ErrorHandler("Task not found", 404));
+        }
+        await task.deleteOne();
+        res.json({
+            success:true,
+            message: "task deleted"
+        });
     }
-    await task.deleteOne();
-    res.json({
-        success:true,
-        message: "task deleted"
-    });
+    catch(error)
+    {
+        next(error);
+    }
 };
