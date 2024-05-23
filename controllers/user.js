@@ -6,22 +6,19 @@ import ErrorHandler from "../middlewares/error.js";
 export const login = async(req,res,next)=>{
     try{
         const {email,name,password} = req.body;
-        // const user = await User.findOne({email}).select("+password");
+        const user = await User.findOne({email}).select("+password");
     
-        // if(!user) return next(new ErrorHandler("Invalid email or password", 400));
+        if(!user) return next(new ErrorHandler("Invalid email or password", 400));
     
         
         
-        //     const isMatch = await bcrypt.compare(password,user.password);
-        //     if(!isMatch) 
-        //     {
-        //         return next(new ErrorHandler("Invalid email or password", 400));
-        //     }
-            // sendCookie(user,res,`Welcome ${user.name}`, 200);
-            res.json({
-        success:true,
-        message
-     })
+            const isMatch = await bcrypt.compare(password,user.password);
+            if(!isMatch) 
+            {
+                return next(new ErrorHandler("Invalid email or password", 400));
+            }
+            sendCookie(user,res,`Welcome ${user.name}`, 200);
+            
     }
     catch(error)
     {
@@ -31,18 +28,22 @@ export const login = async(req,res,next)=>{
 };
 export const register = async(req,res,next)=>{
     try{
-        const {name,email,password} = req.body;
-        let user = await User.findOne({email});
+       res.json({
+        success:true,
+        message:"dcdscnsd"
+     })
+        // const {name,email,password} = req.body;
+        // let user = await User.findOne({email});
     
-        if(user) return next(new ErrorHandler("User already exists", 400));
+        // if(user) return next(new ErrorHandler("User already exists", 400));
     
-        const hashedpassword = await bcrypt.hash(password,10);
-        user = await User.create({
-                name,
-                email,
-                password: hashedpassword
-        });
-        sendCookie(user,res,"Registered successfully",201);
+        // const hashedpassword = await bcrypt.hash(password,10);
+        // user = await User.create({
+        //         name,
+        //         email,
+        //         password: hashedpassword
+        // });
+        // sendCookie(user,res,"Registered successfully",201);
     }
     catch(error)
     {
