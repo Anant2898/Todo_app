@@ -28,22 +28,19 @@ export const login = async(req,res,next)=>{
 };
 export const register = async(req,res,next)=>{
     try{
-       res.json({
-        success:true,
-        message:"dcdscnsd"
-     })
-        // const {name,email,password} = req.body;
-        // let user = await User.findOne({email});
+       
+        const {name,email,password} = req.body;
+        let user = await User.findOne({email});
     
-        // if(user) return next(new ErrorHandler("User already exists", 400));
+        if(user) return next(new ErrorHandler("User already exists", 400));
     
-        // const hashedpassword = await bcrypt.hash(password,10);
-        // user = await User.create({
-        //         name,
-        //         email,
-        //         password: hashedpassword
-        // });
-        // sendCookie(user,res,"Registered successfully",201);
+        const hashedpassword = await bcrypt.hash(password,10);
+        user = await User.create({
+                name,
+                email,
+                password: hashedpassword
+        });
+        sendCookie(user,res,"Registered successfully",201);
     }
     catch(error)
     {
